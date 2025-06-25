@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cita Confirmada - Puntos GOB</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .confirmation-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+        .confirmation-card h2 {
+            color: #28a745; /* Green for success */
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        .confirmation-card p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .confirmation-card .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        .confirmation-card .detail-row span:first-child {
+            font-weight: bold;
+            color: #333;
+        }
+        .confirmation-card .detail-row span:last-child {
+            color: #666;
+            text-align: right;
+        }
+        .confirmation-card .detail-row:last-child {
+            border-bottom: none;
+        }
+        .confirmation-code-display {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #007bff;
+            margin: 25px 0;
+            padding: 10px 20px;
+            background-color: #eaf6ff;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .home-button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 30px;
+            transition: background-color 0.3s ease;
+        }
+        .home-button:hover {
+            background-color: #0056b3;
+        }
+        .qr-display {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .qr-display img {
+            max-width: 200px;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        /* Estilo para el mensaje destacado */
+        .email-sent-message {
+            background-color: #d4edda; /* Un verde claro para éxito */
+            color: #155724; /* Texto verde oscuro */
+            border: 1px solid #c3e6cb;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-card">
+        <h2>✅ ¡Cita Confirmada!</h2>
+
+        <div class="email-sent-message">
+            Tu código de confirmación y los detalles de tu cita fueron enviados a tu correo electrónico: <strong><%= correo_electronico %></strong>.
+        </div>
+        <% if (qr_image_data_url) { %>
+            <div class="qr-display">
+                <p>Escanea este código QR para ver los detalles de tu cita:</p>
+                <img src="<%= qr_image_data_url %>" alt="Código QR de la Cita">
+            </div>
+        <% } %>
+
+        <p>Tu código de confirmación también es:</p>
+        <div class="confirmation-code-display"><%= confirmation_code %></div>
+
+        <h3>Detalles de tu Cita:</h3>
+        <div class="detail-row">
+            <span>Trámite:</span> <span><%= tramite %></span>
+        </div>
+        <div class="detail-row">
+            <span>Institución:</span> <span><%= institucion %></span>
+        </div>
+        <div class="detail-row">
+            <span>Nombres:</span> <span><%= nombres %></span>
+        </div>
+        <div class="detail-row">
+            <span>Apellidos:</span> <span><%= apellidos %></span>
+        </div>
+        <div class="detail-row">
+            <span>Teléfono:</span> <span><%= telefono %></span>
+        </div>
+        <div class="detail-row">
+            <span>Correo electrónico:</span> <span><%= correo_electronico %></span>
+        </div>
+        <div class="detail-row">
+            <span>Cédula:</span> <span><%= cedula %></span>
+        </div>
+        <div class="detail-row">
+            <span>Dirección:</span> <span><%= direccion %></span>
+        </div>
+        <div class="detail-row">
+            <span>Fecha de la Cita:</span> <span><%= fecha_cita %></span>
+        </div>
+
+        <button class="home-button" onclick="window.location.href='/'">Agendar otra cita</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda tu Cita - Puntos GOB</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <!-- <div class="container">
+        <div class="header">
+            <a href="#" class="back-link">← Volver</a>
+        </div> -->
+<style>
+ body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.header {
+    background-color: #f8f9fa;
+    padding: 15px 30px;
+    border-bottom: 1px solid #eee;
+}
+
+.back-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.main-content {
+    display: flex;
+    flex-wrap: wrap; /* Allows columns to wrap on smaller screens */
+}
+
+.form-column, .details-column {
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.form-column {
+    flex: 2; /* Takes more space */
+    min-width: 400px; /* Minimum width before wrapping */
+    border-right: 1px solid #eee; /* Separator */
+}
+
+.details-column {
+    flex: 1; /* Takes less space */
+    min-width: 300px; /* Minimum width before wrapping */
+    background-color: #f8f9fa;
+}
+
+h2 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select {
+    width: calc(100% - 20px); /* Adjust for padding */
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+/* Calendar Styling */
+.calendar-section {
+    margin-top: 30px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    padding: 15px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+}
+
+.nav-arrows .arrow {
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.nav-arrows .arrow:hover {
+    background-color: #e9ecef;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    text-align: center;
+}
+
+.day-name {
+    font-weight: bold;
+    color: #777;
+    padding-bottom: 10px;
+}
+
+.day {
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.day:hover:not(.empty):not(.selected) {
+    background-color: #e9ecef;
+}
+
+.day.empty {
+    visibility: hidden;
+    cursor: default;
+}
+
+.day.selected {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Details Column Styling */
+.details-column h2 {
+    color: #007bff; /* Blue heading for details */
+}
+
+.detail-item {
+    margin-bottom: 15px;
+    padding: 10px 0;
+    border-bottom: 1px dashed #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Allows text to wrap */
+}
+
+.detail-item span:first-child {
+    font-weight: bold;
+    color: #555;
+    margin-right: 10px;
+}
+
+.detail-item span:last-child {
+    color: #333;
+    flex-grow: 1; /* Allows the value to take remaining space */
+    text-align: right; /* Align value to the right */
+}
+
+.confirm-button {
+    background-color: #007bff;
+    color: white;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 30px;
+    transition: background-color 0.3s ease;
+}
+
+.confirm-button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+    }
+
+    .form-column, .details-column {
+        border-right: none;
+        border-bottom: 1px solid #eee; /* Add bottom border for separation */
+        min-width: unset; /* Remove min-width to allow full flexibility */
+    }
+
+    .details-column {
+        padding-top: 15px; /* Adjust padding for better look on small screens */
+    }
+}
+</style>
+        <div class="main-content">
+            <div class="form-column">
+                <h2>Agenda tu cita</h2>
+                <form id="appointmentForm" action="/confirmar-cita" method="POST">
+                    <label for="tramite">Trámite</label>
+                    <select id="tramite" name="tramite">
+                        <option value="Por defecto">Por defecto</option>
+                        <option value="Renovacion Cedula">Renovación Cédula</option>
+                        <option value="Pasaporte">Pasaporte</option>
+                        <option value="Licencia">Licencia de Conducir</option>
+                    </select>
+
+                    <label for="nombres">Nombres</label>
+                    <input type="text" id="nombres" name="nombres" value="John Doe" required>
+
+                    <label for="correo_electronico">Correo electrónico</label>
+                    <input type="email" id="correo_electronico" name="correo_electronico" value="johndoe@gmail.com" required>
+
+                    <label for="cedula">Cédula</label>
+                    <input type="text" id="cedula" name="cedula" value="000-0000000-0" required pattern="[0-9]{3}-[0-9]{7}-[0-9]{1}">
+
+                    <label for="direccion">Dirección</label>
+                    <input type="text" id="direccion" name="direccion" value="Calle ej. #1, Provincia, País." required>
+
+                    <label for="institucion">Institución</label>
+                    <select id="institucion" name="institucion">
+                        <option value="Por defecto">Por defecto</option>
+                        <option value="DGRN">DGRN</option>
+                        <option value="DN">DN</option>
+                    </select>
+
+                    <label for="apellidos">Apellidos</label>
+                    <input type="text" id="apellidos" name="apellidos" value="Genez Suarez" required>
+
+                    <label for="telefono">Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" value="000-000-0000" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+
+                    <div class="calendar-section">
+                        <div class="calendar-header">
+                            <span id="currentMonth"></span>
+                            <div class="nav-arrows">
+                                <span class="arrow" onclick="prevMonth()"> &lt; </span>
+                                <span class="arrow" onclick="nextMonth()"> &gt; </span>
+                            </div>
+                        </div>
+                        <div class="calendar-grid">
+                            </div>
+                    </div>
+                     <input type="hidden" id="fecha_cita" name="fecha_cita" value="">
+                </form>
+            </div>
+
+            <div class="details-column">
+                <h2>Datos de tu cita</h2>
+                <div class="detail-item">
+                    <span>Tramite:</span> <span id="displayTramite">Por defecto</span>
+                </div>
+                <div class="detail-item">
+                    <span>Institucion:</span> <span id="displayInstitucion">Por defecto</span>
+                </div>
+                <div class="detail-item">
+                    <span>Nombres:</span> <span id="displayNombres">John Doe</span>
+                </div>
+                <div class="detail-item">
+                    <span>Apellidos:</span> <span id="displayApellidos">Genez Suarez</span>
+                </div>
+                <div class="detail-item">
+                    <span>Telefono:</span> <span id="displayTelefono">000-000-0000</span>
+                </div>
+                <div class="detail-item">
+                    <span>Correo electronico:</span> <span id="displayCorreoElectronico">johndoe@gmail.com</span>
+                </div>
+                <div class="detail-item">
+                    <span>Cedula:</span> <span id="displayCedula">000-0000000-0</span>
+                </div>
+                <div class="detail-item">
+                    <span>Direccion:</span> <span id="displayDireccion">Calle ej. #1, Provincia, País.</span>
+                </div>
+                <div class="detail-item">
+                    <span>Fecha Cita:</span> <span id="displayFechaCita"></span>
+                </div>
+
+                <button type="submit" form="appointmentForm" class="confirm-button">Confirmar cita</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('appointmentForm');
+        const displayTramite = document.getElementById('displayTramite');
+        const displayInstitucion = document.getElementById('displayInstitucion');
+        const displayNombres = document.getElementById('displayNombres');
+        const displayApellidos = document.getElementById('displayApellidos');
+        const displayTelefono = document.getElementById('displayTelefono');
+        const displayCorreoElectronico = document.getElementById('displayCorreoElectronico');
+        const displayCedula = document.getElementById('displayCedula');
+        const displayDireccion = document.getElementById('displayDireccion');
+        const displayFechaCita = document.getElementById('displayFechaCita');
+        const fechaCitaInput = document.getElementById('fecha_cita');
+        const calendarGrid = document.querySelector('.calendar-grid');
+
+        // Function to update details column
+        function updateDetails() {
+            displayTramite.textContent = form.elements['tramite'].value;
+            displayInstitucion.textContent = form.elements['institucion'].value;
+            displayNombres.textContent = form.elements['nombres'].value;
+            displayApellidos.textContent = form.elements['apellidos'].value;
+            displayTelefono.textContent = form.elements['telefono'].value;
+            displayCorreoElectronico.textContent = form.elements['correo_electronico'].value;
+            displayCedula.textContent = form.elements['cedula'].value;
+            displayDireccion.textContent = form.elements['direccion'].value;
+
+            // Format date for display
+            const selectedDateValue = fechaCitaInput.value;
+            if (selectedDateValue) {
+                const parts = selectedDateValue.split('-'); // YYYY-MM-DD
+                // Use new Date(year, monthIndex, day) to avoid timezone issues
+                const selectedDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                if (!isNaN(selectedDate.getTime())) { // Check if date is valid
+                    displayFechaCita.textContent = selectedDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+                } else {
+                    displayFechaCita.textContent = 'Seleccione una fecha válida';
+                }
+            } else {
+                displayFechaCita.textContent = 'Seleccione una fecha';
+            }
+        }
+
+        form.addEventListener('input', updateDetails);
+
+        // Calendar interactivity
+        let currentMonth = new Date(); // Start with current month
+        let availableSlots = new Set(); // To store available slots fetched from backend (using Set for quick lookup)
+
+        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+        async function fetchAvailableSlots(year, monthIndex) { // monthIndex is 0-indexed
+            try {
+                // Node.js API expects month name
+                const monthName = monthNames[monthIndex].toLowerCase();
+                const response = await fetch(`/api/available-slots?year=${year}&month=${monthName}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                availableSlots.clear(); // Clear previous slots
+                data.availableDates.forEach(date => {
+                    availableSlots.add(date); // Add date string (YYYY-MM-DD)
+                });
+                renderCalendar(); // Re-render calendar with new availability
+            } catch (error) {
+                console.error("Error fetching available slots:", error);
+                // Optionally display an error message to the user
+            }
+        }
+
+        function renderCalendar() {
+            document.getElementById('currentMonth').textContent = monthNames[currentMonth.getMonth()] + " " + currentMonth.getFullYear();
+
+            calendarGrid.innerHTML = `
+                <div class="day-name">D</div>
+                <div class="day-name">L</div>
+                <div class="day-name">M</div>
+                <div class="day-name">X</div>
+                <div class="day-name">J</div>
+                <div class="day-name">V</div>
+                <div class="day-name">S</div>
+            `;
+
+            const firstDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay(); // 0 for Sunday, 1 for Monday...
+            const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
+
+            // Add empty days for the start of the month
+            for (let i = 0; i < firstDayOfMonth; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.classList.add('day', 'empty');
+                calendarGrid.appendChild(emptyDay);
+            }
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const day = document.createElement('div');
+                day.classList.add('day');
+                day.textContent = i;
+
+                // Create date string in YYYY-MM-DD format
+                const dateString = `${currentMonth.getFullYear()}-${(currentMonth.getMonth() + 1).toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
+                day.setAttribute('data-date', dateString);
+
+                const today = new Date();
+                today.setHours(0,0,0,0); // Normalize today for comparison
+
+                const currentDayFormatted = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), i);
+                currentDayFormatted.setHours(0,0,0,0);
+
+
+                // Disable past dates
+                if (currentDayFormatted < today) {
+                    day.classList.add('disabled');
+                    day.style.cursor = 'not-allowed';
+                } else {
+                    // Check if date is available from fetched slots
+                    if (availableSlots.has(dateString)) {
+                        day.classList.add('available');
+                    } else {
+                        day.classList.add('unavailable');
+                        day.style.cursor = 'not-allowed';
+                    }
+
+                    // If this day is the currently selected one
+                    if (fechaCitaInput.value === dateString) {
+                         day.classList.add('selected');
+                    }
+
+                    day.addEventListener('click', () => {
+                        if (day.classList.contains('disabled') || day.classList.contains('unavailable')) {
+                            return; // Do nothing if disabled or unavailable
+                        }
+                        // Remove 'selected' from previously selected day
+                        document.querySelectorAll('.calendar-grid .day').forEach(d => d.classList.remove('selected'));
+                        day.classList.add('selected'); // Add 'selected' to clicked day
+                        fechaCitaInput.value = day.dataset.date; // Update hidden input
+                        updateDetails(); // Update display details
+                    });
+                }
+                calendarGrid.appendChild(day);
+            }
+            // Ensure a date is selected by default if available and not in the past
+            if (!fechaCitaInput.value || new Date(fechaCitaInput.value).setHours(0,0,0,0) < today.setHours(0,0,0,0) ) {
+                const nextAvailableDay = document.querySelector('.calendar-grid .day.available:not(.disabled)');
+                if (nextAvailableDay) {
+                    nextAvailableDay.click(); // Programmatically click the first available day
+                }
+            } else {
+                // If a date is already selected, ensure it's highlighted
+                const currentSelectedDay = document.querySelector(`.calendar-grid .day[data-date="${fechaCitaInput.value}"]`);
+                if (currentSelectedDay) {
+                    currentSelectedDay.classList.add('selected');
+                }
+            }
+        }
+
+        function prevMonth() {
+            currentMonth.setMonth(currentMonth.getMonth() - 1);
+            fetchAvailableSlots(currentMonth.getFullYear(), currentMonth.getMonth());
+        }
+
+        function nextMonth() {
+            currentMonth.setMonth(currentMonth.getMonth() + 1);
+            fetchAvailableSlots(currentMonth.getFullYear(), currentMonth.getMonth());
+        }
+
+        // Initial fetch and render
+        fetchAvailableSlots(currentMonth.getFullYear(), currentMonth.getMonth());
+        updateDetails(); // Initial update of details based on default values
+    </script>
+</body>
+</html>

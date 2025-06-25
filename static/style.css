@@ -1,0 +1,46 @@
+/* Existing styles... */
+
+
+
+.day.selected {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* New: Styles for available/unavailable/disabled dates */
+.day.available {
+    background-color: #e6ffe6; /* Light green for available */
+    cursor: pointer;
+}
+
+.day.available:hover {
+    background-color: #ccffcc; /* Darker green on hover */
+}
+
+.day.unavailable {
+    background-color: #f8d7da; /* Light red for unavailable */
+    color: #6c757d; /* Grey text */
+    cursor: not-allowed;
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.day.disabled {
+    background-color: #e9ecef; /* Light grey for past dates */
+    color: #adb5bd;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* Ensure selected state overrides others if applicable */
+.day.selected.available {
+    background-color: #007bff; /* Keep blue for selected available */
+    color: #fff;
+}
+
+/* Remove hover effect for disabled/unavailable days */
+.day.disabled:hover,
+.day.unavailable:hover {
+    background-color: inherit;
+}
