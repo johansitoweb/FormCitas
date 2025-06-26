@@ -6,6 +6,8 @@
     <title>Agenda tu Cita - Puntos GOB</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Boxicons CDN -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 <body class=" flex justify-center p-5 min-h-screen">
     <div class="bg-white   w-full max-w-6xl flex flex-col ">
@@ -16,8 +18,13 @@
 
 
                 <form class=" flex gap-10  w-full" id="appointmentForm" action="/confirmar-cita" method="POST">
-                    <div class="flex flex-col justify-center">
-                        <h2 class="text-2xl font-bold text-[#0088FF] mb-6">Agenda tu cita</h2>
+                    <div class="flex flex-col  justify-center">
+                        <div class="flex mb-10 items-center" >
+                             <i class='bx bx-reply text-[28px] text-[#0088FF] ' ></i>
+                            <span class="text-gray-600">volver</span>
+                        </div>
+                       
+                        <h2 class="text-2xl font-bold text-[#0088FF] mb-6 text-[20px]">  Agenda tu cita</h2>
 
                     <label for="tramite" class="block mb-2 text-[#3399FF] text-[20px] font-semibold">Trámite</label>
                     <select id="tramite" name="tramite" class="w-[330px]  rounded-[9px] p-3 mb-5 border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none bg-gray-300">
@@ -27,43 +34,48 @@
                         <option value="Licencia">Licencia de Conducir</option>
                     </select>
 
-                    <label for="nombres" class="block mb-2 text-[#3399FF] font-semibold">Nombres</label>
+                    <label for="nombres" class="block mb-2 text-[#3399FF] text-[20px] font-semibold">Nombres</label>
                     <input type="text" id="nombres" name="nombres" value="John Doe" required class="w-[330px] h-[42px] rounded-[9px] p-3 mb-5 border border-gray-300   focus:outline-none bg-gray-300">
 
-                    <label for="correo_electronico" class="block mb-2 text-[#3399FF] font-semibold">Correo electrónico</label>
+                    <label for="correo_electronico" class="block mb-2 text-[#3399FF] text-[20px] font-semibold">Correo electrónico</label>
                     <input type="email" id="correo_electronico" name="correo_electronico" value="johndoe@gmail.com" required class="w-[330px] h-[42px] rounded-[9px] p-3 mb-5 border border-gray-300 focus:outline-none bg-gray-300">
 
-                    <label for="cedula" class="block mb-2 text-[#3399FF] font-semibold">Cédula</label>
+                    <label for="cedula" class="block mb-2 text-[#3399FF] text-[20px] font-semibold">Cédula</label>
                     <input type="text" id="cedula" name="cedula" value="000-0000000-0" required pattern="[0-9]{3}-[0-9]{7}-[0-9]{1}" class="w-[330px] h-[42px] rounded-[9px] p-3 mb-5 border border-gray-300   focus:outline-none bg-gray-300">
 
 
-                    <label for="direccion" class="block mb-2 text-[#3399FF] font-semibold">Dirección</label>
+                    <label for="direccion" class="block mb-2 text-[#3399FF] text-[20px] font-semibold">Dirección</label>
                     <input type="text" id="direccion" name="direccion" value="Calle ej. #1, Provincia, País." required class="w-[330px] h-[42px] rounded-[9px] p-3 mb-5 border border-gray-300 focus:border-blue-500  focus:outline-none bg-gray-300">
                     </div>
                       <div class="flex flex-col">
-                    <label for="institucion" class="block mb-2 text-[#3399FF] font-semibold">Institución</label>
+                    <label for="institucion" class="block mb-2 text-[#3399FF] text-[20px] font-semibold">Institución</label>
                     <select id="institucion" name="institucion" class="w-[330px] rounded-[9px] p-3 mb-5 border border-gray-300 focus:outline-none bg-gray-300">
                         <option value="Por defecto">Por defecto</option>
                         <option value="DGRN">DGRN</option>
                         <option value="DN">DN</option>
                     </select>
 
-                    <label for="apellidos" class="block mb-2 text-[#3399FF] font-semibold">Apellidos</label>
+                    <label for="apellidos" class="block mb-2 text-[#3399FF] text-[20px] font-semibold">Apellidos</label>
                     <input type="text" id="apellidos" name="apellidos" value="Genez Suarez" required class="w-[330px] h-[42px] rounded-[9px] p-3 mb-5 border border-gray-300 focus:outline-none bg-gray-300">
 
-                    <label for="telefono" class="block mb-2 text-[#3399FF] font-semibold">Teléfono</label>
+                    <label for="telefono" class="block mb-2 text-[#3399FF] text-[20px] font-semibold">Teléfono</label>
                     <input type="tel" id="telefono" name="telefono" value="000-000-0000" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="w-[330px] h-[42px] rounded-[9px] p-3 mb-5 border border-gray-300  focus:outline-none bg-gray-300">
 
-                     <label for="Fecha" class="block mb-2 text-[#3399FF] font-semibold">Fecha</label>
+                     <label for="Fecha" class="block mb-2 text-[#3399FF] text-[20px] font-semibold">Fecha</label>
                     <input type="Date" id="fecha_cita" name="fecha_cita" value="" class="w-[330px] h-[42px] rounded-[9px] bg-gray-300 focus:outline-none">
+
+                    <label for="hora_cita" class="block mb-2 text-[#3399FF] text-[20px] font-semibold">Hora</label>
+                    <input type="time" id="hora_cita" name="hora_cita" required placeholder="Hora" class="w-[330px] h-[42px] rounded-[9px] p-3 mb-5 border border-gray-300 focus:outline-none bg-gray-300">
                     <div class="mt-8 border border-gray-200 rounded-lg bg-white p-4">
                 </div>
                         
                     </div>
                 </form>
             </div>
+
+
             <div class="datos flex-1 flex flex-col justify-center items-center min-w-[250px] border-gray-50 border p-8 w-[466px] h-[592px]">
-                <h2 class="text-xl font-bold text-[#3399FF] mb-6">Datos de tu cita</h2>
+                <h2 class="text-xl font-bold text-[#3399FF] mb-6 text-[20px]">Datos de tu cita</h2>
                 <div class="">
                     <div class="flex  justify-between border-b border-dashed border-gray-200 py-2">
                         <span class="font-semibold text-[20px] text-[#0088FF]">Tramite:</span> <span id="displayTramite" class="text-gray-600">Por defecto</span>
@@ -81,7 +93,7 @@
                         <span class="font-semibold text-[20px] text-[#0088FF]">Telefono:</span> <span id="displayTelefono" class="text-gray-600">000-000-0000</span>
                     </div>
                     <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
-                        <span class="font-semibold text-[20px]  text-[#0088FF]">Correo electronico:</span> <span id="displayCorreoElectronico" class="text-gray-600">johndoe@gmail.com</span>
+                        <span class="font-semibold text-[20px] text-[#0088FF]">Correo electronico:</span> <span id="displayCorreoElectronico" class="text-gray-600">johndoe@gmail.com</span>
                     </div>
                     <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
                         <span class="font-semibold text-[20px] text-[#0088FF]">Cedula:</span> <span id="displayCedula" class="text-gray-600">000-0000000-0</span>
@@ -90,7 +102,7 @@
                         <span class="font-semibold text-[20px] text-[#0088FF]">Direccion:</span> <span id="displayDireccion" class="text-gray-600">Calle ej. #1, Provincia, País.</span>
                     </div>
                     <div class="flex justify-between py-2">
-                        <span class="font-semibold text-[20px] text-[#0088FF]">Fecha Cita:</span> <span id="displayFechaCita" class="text-gray-600"></span>
+                        <span class="font-semibold text-[20px] text-[#0088FF]"></span> <span id="displayFechaCita" class="text-gray-600"></span>
                     </div>
                 </div>
                 <button type="submit" form="appointmentForm" class="bg-blue-600 hover:bg-blue-800 text-white px-6 py-3 rounded-[9px] mt-8 w-full text-base font-semibold transition-colors duration-300">Confirmar cita</button>
