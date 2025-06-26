@@ -4,145 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cita Confirmada - Puntos GOB</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <style>
-        body {
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .confirmation-card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            text-align: center;
-            max-width: 600px;
-            width: 90%;
-        }
-        .confirmation-card h2 {
-            color: #28a745; /* Green for success */
-            margin-bottom: 20px;
-            font-size: 2em;
-        }
-        .confirmation-card p {
-            font-size: 1.1em;
-            color: #555;
-            margin-bottom: 10px;
-        }
-        .confirmation-card .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px dashed #eee;
-        }
-        .confirmation-card .detail-row span:first-child {
-            font-weight: bold;
-            color: #333;
-        }
-        .confirmation-card .detail-row span:last-child {
-            color: #666;
-            text-align: right;
-        }
-        .confirmation-card .detail-row:last-child {
-            border-bottom: none;
-        }
-        .confirmation-code-display {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #007bff;
-            margin: 25px 0;
-            padding: 10px 20px;
-            background-color: #eaf6ff;
-            border-radius: 5px;
-            display: inline-block;
-        }
-        .home-button {
-            background-color: #007bff;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            margin-top: 30px;
-            transition: background-color 0.3s ease;
-        }
-        .home-button:hover {
-            background-color: #0056b3;
-        }
-        .qr-display {
-            margin: 20px 0;
-            text-align: center;
-        }
-        .qr-display img {
-            max-width: 200px;
-            height: auto;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        /* Estilo para el mensaje destacado */
-        .email-sent-message {
-            background-color: #d4edda; /* Un verde claro para éxito */
-            color: #155724; /* Texto verde oscuro */
-            border: 1px solid #c3e6cb;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 25px;
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-    </style>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="confirmation-card">
-        <h2>✅ ¡Cita Confirmada!</h2>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+    <div class="bg-white rounded-lg shadow-lg p-10 text-center max-w-xl w-11/12">
+        <h2 class="text-green-600 mb-5 text-3xl font-bold flex items-center justify-center gap-2">✅ ¡Cita Confirmada!</h2>
 
-        <div class="email-sent-message">
+        <div class="bg-green-100 text-green-800 border border-green-200 p-4 rounded mb-6 font-bold text-base">
             Tu código de confirmación y los detalles de tu cita fueron enviados a tu correo electrónico: <strong><%= correo_electronico %></strong>.
         </div>
         <% if (qr_image_data_url) { %>
-            <div class="qr-display">
-                <p>Escanea este código QR para ver los detalles de tu cita:</p>
-                <img src="<%= qr_image_data_url %>" alt="Código QR de la Cita">
+            <div class="my-5 text-center">
+                <p class="mb-2">Escanea este código QR para ver los detalles de tu cita:</p>
+                <img src="<%= qr_image_data_url %>" alt="Código QR de la Cita" class="max-w-xs mx-auto border border-gray-200 rounded" />
             </div>
         <% } %>
 
-        <p>Tu código de confirmación también es:</p>
-        <div class="confirmation-code-display"><%= confirmation_code %></div>
+        <p class="mb-2">Tu código de confirmación también es:</p>
+        <div class="text-blue-600 text-2xl font-bold my-6 px-5 py-2 bg-blue-50 rounded inline-block"><%= confirmation_code %></div>
 
-        <h3>Detalles de tu Cita:</h3>
-        <div class="detail-row">
-            <span>Trámite:</span> <span><%= tramite %></span>
-        </div>
-        <div class="detail-row">
-            <span>Institución:</span> <span><%= institucion %></span>
-        </div>
-        <div class="detail-row">
-            <span>Nombres:</span> <span><%= nombres %></span>
-        </div>
-        <div class="detail-row">
-            <span>Apellidos:</span> <span><%= apellidos %></span>
-        </div>
-        <div class="detail-row">
-            <span>Teléfono:</span> <span><%= telefono %></span>
-        </div>
-        <div class="detail-row">
-            <span>Correo electrónico:</span> <span><%= correo_electronico %></span>
-        </div>
-        <div class="detail-row">
-            <span>Cédula:</span> <span><%= cedula %></span>
-        </div>
-        <div class="detail-row">
-            <span>Dirección:</span> <span><%= direccion %></span>
-        </div>
-        <div class="detail-row">
-            <span>Fecha de la Cita:</span> <span><%= fecha_cita %></span>
+        <h3 class="text-lg font-semibold mt-6 mb-3">Detalles de tu Cita:</h3>
+        <div class="space-y-2">
+            <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                <span class="font-semibold text-gray-800">Trámite:</span> <span class="text-gray-600"><%= tramite %></span>
+            </div>
+            <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                <span class="font-semibold text-gray-800">Institución:</span> <span class="text-gray-600"><%= institucion %></span>
+            </div>
+            <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                <span class="font-semibold text-gray-800">Nombres:</span> <span class="text-gray-600"><%= nombres %></span>
+            </div>
+            <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                <span class="font-semibold text-gray-800">Apellidos:</span> <span class="text-gray-600"><%= apellidos %></span>
+            </div>
+            <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                <span class="font-semibold text-gray-800">Teléfono:</span> <span class="text-gray-600"><%= telefono %></span>
+            </div>
+            <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                <span class="font-semibold text-gray-800">Correo electrónico:</span> <span class="text-gray-600"><%= correo_electronico %></span>
+            </div>
+            <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                <span class="font-semibold text-gray-800">Cédula:</span> <span class="text-gray-600"><%= cedula %></span>
+            </div>
+            <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                <span class="font-semibold text-gray-800">Dirección:</span> <span class="text-gray-600"><%= direccion %></span>
+            </div>
+            <div class="flex justify-between py-2">
+                <span class="font-semibold text-gray-800">Fecha de la Cita:</span> <span class="text-gray-600"><%= fecha_cita %></span>
+            </div>
         </div>
 
-        <button class="home-button" onclick="window.location.href='/'">Agendar otra cita</button>
+        <button class="bg-blue-600 hover:bg-blue-800 text-white px-6 py-3 rounded mt-8 text-base font-semibold transition-colors duration-300" onclick="window.location.href='/'">Agendar otra cita</button>
     </div>
 </body>
 </html>

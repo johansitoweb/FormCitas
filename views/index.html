@@ -4,318 +4,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda tu Cita - Puntos GOB</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <!-- <div class="container">
-        <div class="header">
-            <a href="#" class="back-link">← Volver</a>
-        </div> -->
-<style>
- body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background-color: #f0f2f5;
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-}
-
-.container {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.header {
-    background-color: #f8f9fa;
-    padding: 15px 30px;
-    border-bottom: 1px solid #eee;
-}
-
-.back-link {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.main-content {
-    display: flex;
-    flex-wrap: wrap; /* Allows columns to wrap on smaller screens */
-}
-
-.form-column, .details-column {
-    padding: 30px;
-    box-sizing: border-box;
-}
-
-.form-column {
-    flex: 2; /* Takes more space */
-    min-width: 400px; /* Minimum width before wrapping */
-    border-right: 1px solid #eee; /* Separator */
-}
-
-.details-column {
-    flex: 1; /* Takes less space */
-    min-width: 300px; /* Minimum width before wrapping */
-    background-color: #f8f9fa;
-}
-
-h2 {
-    color: #333;
-    margin-top: 0;
-    margin-bottom: 25px;
-    font-size: 1.8em;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    color: #555;
-    font-weight: bold;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-select {
-    width: calc(100% - 20px); /* Adjust for padding */
-    padding: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1em;
-}
-
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="tel"]:focus,
-select:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
-}
-
-/* Calendar Styling */
-.calendar-section {
-    margin-top: 30px;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    overflow: hidden;
-    background-color: #fff;
-    padding: 15px;
-}
-
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #333;
-}
-
-.nav-arrows .arrow {
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 4px;
-    transition: background-color 0.2s;
-}
-
-.nav-arrows .arrow:hover {
-    background-color: #e9ecef;
-}
-
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    text-align: center;
-}
-
-.day-name {
-    font-weight: bold;
-    color: #777;
-    padding-bottom: 10px;
-}
-
-.day {
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.day:hover:not(.empty):not(.selected) {
-    background-color: #e9ecef;
-}
-
-.day.empty {
-    visibility: hidden;
-    cursor: default;
-}
-
-.day.selected {
-    background-color: #007bff;
-    color: #fff;
-    font-weight: bold;
-}
-
-/* Details Column Styling */
-.details-column h2 {
-    color: #007bff; /* Blue heading for details */
-}
-
-.detail-item {
-    margin-bottom: 15px;
-    padding: 10px 0;
-    border-bottom: 1px dashed #e9ecef;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap; /* Allows text to wrap */
-}
-
-.detail-item span:first-child {
-    font-weight: bold;
-    color: #555;
-    margin-right: 10px;
-}
-
-.detail-item span:last-child {
-    color: #333;
-    flex-grow: 1; /* Allows the value to take remaining space */
-    text-align: right; /* Align value to the right */
-}
-
-.confirm-button {
-    background-color: #007bff;
-    color: white;
-    padding: 15px 25px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: bold;
-    width: 100%;
-    margin-top: 30px;
-    transition: background-color 0.3s ease;
-}
-
-.confirm-button:hover {
-    background-color: #0056b3;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .main-content {
-        flex-direction: column;
-    }
-
-    .form-column, .details-column {
-        border-right: none;
-        border-bottom: 1px solid #eee; /* Add bottom border for separation */
-        min-width: unset; /* Remove min-width to allow full flexibility */
-    }
-
-    .details-column {
-        padding-top: 15px; /* Adjust padding for better look on small screens */
-    }
-}
-</style>
-        <div class="main-content">
-            <div class="form-column">
-                <h2>Agenda tu cita</h2>
+<body class="bg-gray-100  flex justify-center p-5 min-h-screen">
+    <div class="bg-white border rounded-lg shadow-lg w-full max-w-6xl flex flex-col overflow-hidden">
+        <div class="flex border flex-col md:flex-row w-full">
+            <div class="flex-2 min-w-[300px] md:min-w-[400px] border-b md:border-b-0 md:border-r border-gray-200 p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Agenda tu cita</h2>
                 <form id="appointmentForm" action="/confirmar-cita" method="POST">
-                    <label for="tramite">Trámite</label>
-                    <select id="tramite" name="tramite">
+                    <label for="tramite" class="block mb-2 text-gray-700 font-semibold">Trámite</label>
+                    <select id="tramite" name="tramite" class="w-full p-3 mb-5 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200">
                         <option value="Por defecto">Por defecto</option>
                         <option value="Renovacion Cedula">Renovación Cédula</option>
                         <option value="Pasaporte">Pasaporte</option>
                         <option value="Licencia">Licencia de Conducir</option>
                     </select>
 
-                    <label for="nombres">Nombres</label>
-                    <input type="text" id="nombres" name="nombres" value="John Doe" required>
+                    <label for="nombres" class="block mb-2 text-gray-700 font-semibold">Nombres</label>
+                    <input type="text" id="nombres" name="nombres" value="John Doe" required class="w-full p-3 mb-5 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200">
 
-                    <label for="correo_electronico">Correo electrónico</label>
-                    <input type="email" id="correo_electronico" name="correo_electronico" value="johndoe@gmail.com" required>
+                    <label for="correo_electronico" class="block mb-2 text-gray-700 font-semibold">Correo electrónico</label>
+                    <input type="email" id="correo_electronico" name="correo_electronico" value="johndoe@gmail.com" required class="w-full p-3 mb-5 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200">
 
-                    <label for="cedula">Cédula</label>
-                    <input type="text" id="cedula" name="cedula" value="000-0000000-0" required pattern="[0-9]{3}-[0-9]{7}-[0-9]{1}">
+                    <label for="cedula" class="block mb-2 text-gray-700 font-semibold">Cédula</label>
+                    <input type="text" id="cedula" name="cedula" value="000-0000000-0" required pattern="[0-9]{3}-[0-9]{7}-[0-9]{1}" class="w-full p-3 mb-5 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200">
 
-                    <label for="direccion">Dirección</label>
-                    <input type="text" id="direccion" name="direccion" value="Calle ej. #1, Provincia, País." required>
+                    <label for="direccion" class="block mb-2 text-gray-700 font-semibold">Dirección</label>
+                    <input type="text" id="direccion" name="direccion" value="Calle ej. #1, Provincia, País." required class="w-full p-3 mb-5 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200">
 
-                    <label for="institucion">Institución</label>
-                    <select id="institucion" name="institucion">
+                    <label for="institucion" class="block mb-2 text-gray-700 font-semibold">Institución</label>
+                    <select id="institucion" name="institucion" class="w-full p-3 mb-5 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200">
                         <option value="Por defecto">Por defecto</option>
                         <option value="DGRN">DGRN</option>
                         <option value="DN">DN</option>
                     </select>
 
-                    <label for="apellidos">Apellidos</label>
-                    <input type="text" id="apellidos" name="apellidos" value="Genez Suarez" required>
+                    <label for="apellidos" class="block mb-2 text-gray-700 font-semibold">Apellidos</label>
+                    <input type="text" id="apellidos" name="apellidos" value="Genez Suarez" required class="w-full p-3 mb-5 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200">
 
-                    <label for="telefono">Teléfono</label>
-                    <input type="tel" id="telefono" name="telefono" value="000-000-0000" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+                    <label for="telefono" class="block mb-2 text-gray-700 font-semibold">Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" value="000-000-0000" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="w-full p-3 mb-5 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200">
 
-                    <div class="calendar-section">
-                        <div class="calendar-header">
+                    <div class="mt-8 border border-gray-200 rounded-lg bg-white p-4">
+                        <div class="flex justify-between items-center mb-4 text-base font-semibold text-gray-700">
                             <span id="currentMonth"></span>
-                            <div class="nav-arrows">
-                                <span class="arrow" onclick="prevMonth()"> &lt; </span>
-                                <span class="arrow" onclick="nextMonth()"> &gt; </span>
+                            <div class="flex gap-2">
+                                <span class="cursor-pointer px-2 py-1 rounded hover:bg-gray-200" onclick="prevMonth()"> &lt; </span>
+                                <span class="cursor-pointer px-2 py-1 rounded hover:bg-gray-200" onclick="nextMonth()"> &gt; </span>
                             </div>
                         </div>
-                        <div class="calendar-grid">
-                            </div>
+                        <div class="grid grid-cols-7 gap-1 text-center calendar-grid">
+                            <!-- Calendar days will be rendered here -->
+                        </div>
                     </div>
-                     <input type="hidden" id="fecha_cita" name="fecha_cita" value="">
+                    <input type="hidden" id="fecha_cita" name="fecha_cita" value="">
                 </form>
             </div>
-
-            <div class="details-column">
-                <h2>Datos de tu cita</h2>
-                <div class="detail-item">
-                    <span>Tramite:</span> <span id="displayTramite">Por defecto</span>
+            <div class="flex-1 min-w-[250px] border bg-gray-50 p-8">
+                <h2 class="text-xl font-bold text-blue-600 mb-6">Datos de tu cita</h2>
+                <div class="space-y-3">
+                    <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                        <span class="font-semibold text-gray-700">Tramite:</span> <span id="displayTramite" class="text-gray-600">Por defecto</span>
+                    </div>
+                    <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                        <span class="font-semibold text-gray-700">Institucion:</span> <span id="displayInstitucion" class="text-gray-600">Por defecto</span>
+                    </div>
+                    <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                        <span class="font-semibold text-gray-700">Nombres:</span> <span id="displayNombres" class="text-gray-600">John Doe</span>
+                    </div>
+                    <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                        <span class="font-semibold text-gray-700">Apellidos:</span> <span id="displayApellidos" class="text-gray-600">Genez Suarez</span>
+                    </div>
+                    <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                        <span class="font-semibold text-gray-700">Telefono:</span> <span id="displayTelefono" class="text-gray-600">000-000-0000</span>
+                    </div>
+                    <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                        <span class="font-semibold text-gray-700">Correo electronico:</span> <span id="displayCorreoElectronico" class="text-gray-600">johndoe@gmail.com</span>
+                    </div>
+                    <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                        <span class="font-semibold text-gray-700">Cedula:</span> <span id="displayCedula" class="text-gray-600">000-0000000-0</span>
+                    </div>
+                    <div class="flex justify-between border-b border-dashed border-gray-200 py-2">
+                        <span class="font-semibold text-gray-700">Direccion:</span> <span id="displayDireccion" class="text-gray-600">Calle ej. #1, Provincia, País.</span>
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <span class="font-semibold text-gray-700">Fecha Cita:</span> <span id="displayFechaCita" class="text-gray-600"></span>
+                    </div>
                 </div>
-                <div class="detail-item">
-                    <span>Institucion:</span> <span id="displayInstitucion">Por defecto</span>
-                </div>
-                <div class="detail-item">
-                    <span>Nombres:</span> <span id="displayNombres">John Doe</span>
-                </div>
-                <div class="detail-item">
-                    <span>Apellidos:</span> <span id="displayApellidos">Genez Suarez</span>
-                </div>
-                <div class="detail-item">
-                    <span>Telefono:</span> <span id="displayTelefono">000-000-0000</span>
-                </div>
-                <div class="detail-item">
-                    <span>Correo electronico:</span> <span id="displayCorreoElectronico">johndoe@gmail.com</span>
-                </div>
-                <div class="detail-item">
-                    <span>Cedula:</span> <span id="displayCedula">000-0000000-0</span>
-                </div>
-                <div class="detail-item">
-                    <span>Direccion:</span> <span id="displayDireccion">Calle ej. #1, Provincia, País.</span>
-                </div>
-                <div class="detail-item">
-                    <span>Fecha Cita:</span> <span id="displayFechaCita"></span>
-                </div>
-
-                <button type="submit" form="appointmentForm" class="confirm-button">Confirmar cita</button>
+                <button type="submit" form="appointmentForm" class="bg-blue-600 hover:bg-blue-800 text-white px-6 py-3 rounded mt-8 w-full text-base font-semibold transition-colors duration-300">Confirmar cita</button>
             </div>
         </div>
     </div>
-
     <script>
+
+
         const form = document.getElementById('appointmentForm');
         const displayTramite = document.getElementById('displayTramite');
         const displayInstitucion = document.getElementById('displayInstitucion');
