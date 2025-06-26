@@ -127,8 +127,7 @@ async function generateQrDataForAppointment(appointment) {
         expira: qrExpiresAt.toISOString()
     });
 
-    // 4. Generar la imagen del Código QR como una Data URL (Base64).
-    // Esto permite incrustar la imagen directamente en el correo electrónico HTML.
+    
     let qrImageDataUrl;
     try {
         qrImageDataUrl = await qrcode.toDataURL(qrContent, {
@@ -147,16 +146,16 @@ async function generateQrDataForAppointment(appointment) {
 }
 
 /**
- * Envía un correo electrónico de confirmación con los detalles de la cita y el código QR.
- * @param {object} appointment - El objeto de la cita.
+ 
+ * @param {object} appointment 
  */
 async function sendConfirmationEmail(appointment) {
-    // Formatear la fecha de la cita para el correo electrónico.
+ 
     const dateObj = new Date(appointment.fecha_cita + 'T12:00:00'); // Añadir hora para evitar problemas de zona horaria
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const formattedDate = dateObj.toLocaleDateString('es-ES', options);
 
-    // Cuerpo del correo electrónico en formato HTML.
+
     const mailOptions = {
         from: process.env.SENDER_EMAIL,
         to: appointment.correo_electronico,
@@ -237,97 +236,69 @@ app.post('/confirmar-cita', async (req, res) => {
     // 1. Generar el código de confirmación de 6 dígitos.
     const confirmationCode = generateConfirmationCode();
 
-    // Crear un objeto de cita inicial para pasar a la generación del QR y la DB.
-    // El 'id' se asignará después de la inserción en la DB.
-    let appointment = {
-        tramite, nombres, apellidos, correo_electronico, cedula,
-        direccion, institucion, telefono, fecha_cita,
-        confirmation_code: confirmationCode
-    };
+    // 2. Insertar la cita en la base de datos SIN QR aún
+    const sqlInsert = `INSERT INTO appointments (tramite, nombres, apellidos, correo_electronico, cedula, direccion, institucion, telefono, fecha_cita, confirmation_code, qr_id_hash, qr_image_data_url, qr_expires_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '', '', datetime('now'))`;
 
-    let qrDetails;
-    try {
-        // 2. Generar los datos del QR (hash, Data URL y fecha de expiración).
-        // Se pasa un ID de cita temporal (0) que será actualizado después de la inserción,
-        // ya que el QR se genera antes de que la cita tenga un ID real en la DB.
-        // El contenido real del QR usará el ID de la cita final.
-        qrDetails = await generateQrDataForAppointment({ ...appointment, id: 0 }); // Usar un ID temporal para el QR inicial.
-        // Después de la inserción, actualizaremos el QR con el ID real si es necesario o confiaremos en el hash.
-    } catch (qrError) {
-        console.error('Error al generar datos del QR:', qrError);
-        return res.status(500).send('Error interno del servidor al generar el código QR.');
-    }
-
-    // Actualizar el objeto appointment con los detalles del QR.
-    appointment.qr_id_hash = qrDetails.qrIdHash;
-    appointment.qr_image_data_url = qrDetails.qrImageDataUrl;
-    appointment.qr_expires_at = qrDetails.qrExpiresAt.toISOString(); // Guardar como string ISO
-
-    // 3. Insertar la cita (con código de 6 dígitos y datos del QR) en la base de datos.
-    const sql = `INSERT INTO appointments (tramite, nombres, apellidos, correo_electronico, cedula, direccion, institucion, telefono, fecha_cita, confirmation_code, qr_id_hash, qr_image_data_url, qr_expires_at)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-    db.run(sql, [
-        appointment.tramite, appointment.nombres, appointment.apellidos,
-        appointment.correo_electronico, appointment.cedula, appointment.direccion,
-        appointment.institucion, appointment.telefono, appointment.fecha_cita,
-        appointment.confirmation_code, appointment.qr_id_hash,
-        appointment.qr_image_data_url, appointment.qr_expires_at
-    ], function(err) { // Usar 'function' para acceder a 'this.lastID'
+    db.run(sqlInsert, [
+        tramite, nombres, apellidos, correo_electronico, cedula, direccion,
+        institucion, telefono, fecha_cita, confirmationCode
+    ], async function(err) {
         if (err) {
             console.error('Error al insertar la cita en la base de datos:', err.message);
             return res.status(500).send('Error interno del servidor al guardar la cita.');
         }
-
-        // Obtener el ID de la cita recién insertada.
-        appointment.id = this.lastID;
-        console.log(`Cita guardada en la DB con ID: ${appointment.id}`);
-
-        // Opcional: Re-generar el QR si el `citaId` en el QR es crítico y debe ser el real.
-        // Esto haría el proceso un poco más lento pero más preciso en el QR.
-        // Por ahora, asumimos que el `qrIdHash` es suficiente para la unicidad en el QR y el `citaId` real solo es de referencia.
-        // Si el `citaId` dentro del QR debe ser el real:
-        // try {
-        //     const updatedQrDetails = await generateQrDataForAppointment(appointment);
-        //     appointment.qr_image_data_url = updatedQrDetails.qr_image_data_url;
-        //     // También podrías actualizar la DB aquí con el nuevo QR si el `qr_image_data_url` cambió
-        //     // o si el `qrIdHash` se actualizó (lo cual no debería si el QR es el mismo contenido).
-        // } catch (qrUpdateError) {
-        //     console.error('Advertencia: Error al actualizar QR con ID real:', qrUpdateError);
-        //     // Continuar, ya que el QR inicial es funcional.
-        // }
-
-
-        // 4. Enviar el correo electrónico de confirmación de forma asíncrona.
-        sendConfirmationEmail(appointment)
-            .catch(emailError => {
-                console.error('Error al enviar el correo (manejo asíncrono):', emailError);
-                // Aquí podrías implementar reintentos o un sistema de colas.
-            });
-
-        // 5. Redirigir a la página de confirmación con los detalles de la cita.
-        const queryParams = new URLSearchParams({
-            tramite: appointment.tramite,
-            nombres: appointment.nombres,
-            apellidos: appointment.apellidos,
-            correo_electronico: appointment.correo_electronico,
-            cedula: appointment.cedula,
-            direccion: appointment.direccion,
-            institucion: appointment.institucion,
-            telefono: appointment.telefono,
-            fecha_cita: appointment.fecha_cita,
-            confirmation_code: appointment.confirmation_code,
-            qr_image_data_url: appointment.qr_image_data_url, // Pasar QR para mostrarlo en la confirmación
-            id: appointment.id // Pasar el ID de la cita
-        }).toString();
-        res.redirect(`/cita-confirmada?${queryParams}`);
+        // 3. Obtener el ID real
+        const appointmentId = this.lastID;
+        // 4. Generar el QR con el ID real
+        const appointment = {
+            id: appointmentId,
+            tramite, nombres, apellidos, correo_electronico, cedula,
+            direccion, institucion, telefono, fecha_cita,
+            confirmation_code: confirmationCode
+        };
+        let qrDetails;
+        try {
+            qrDetails = await generateQrDataForAppointment(appointment);
+        } catch (qrError) {
+            console.error('Error al generar datos del QR:', qrError);
+            return res.status(500).send('Error interno del servidor al generar el código QR.');
+        }
+        // 5. Actualizar la cita con los datos del QR
+        const sqlUpdate = `UPDATE appointments SET qr_id_hash = ?, qr_image_data_url = ?, qr_expires_at = ? WHERE id = ?`;
+        db.run(sqlUpdate, [qrDetails.qrIdHash, qrDetails.qrImageDataUrl, qrDetails.qrExpiresAt.toISOString(), appointmentId], function(updateErr) {
+            if (updateErr) {
+                console.error('Error al actualizar la cita con el QR:', updateErr.message);
+                return res.status(500).send('Error interno del servidor al guardar el QR.');
+            }
+            // 6. Enviar el correo de confirmación (con los datos completos)
+            const appointmentWithQR = { ...appointment, qr_id_hash: qrDetails.qrIdHash, qr_image_data_url: qrDetails.qrImageDataUrl, qr_expires_at: qrDetails.qrExpiresAt.toISOString() };
+            sendConfirmationEmail(appointmentWithQR)
+                .catch(emailError => {
+                    console.error('Error al enviar el correo (manejo asíncrono):', emailError);
+                });
+            // 7. Redirigir solo con el ID
+            res.redirect(`/cita-confirmada?id=${appointmentId}`);
+        });
     });
 });
 
 // Sirve la página de confirmación de cita, mostrando los detalles.
 app.get('/cita-confirmada', (req, res) => {
-    // req.query contiene los parámetros de la URL pasados desde la redirección.
-    res.render('confirmation.html', req.query);
+    const id = req.query.id;
+    if (!id) {
+        return res.status(400).send('ID de cita no proporcionado.');
+    }
+    db.get('SELECT * FROM appointments WHERE id = ?', [id], (err, row) => {
+        if (err) {
+            console.error('Error al buscar la cita:', err.message);
+            return res.status(500).send('Error interno del servidor al buscar la cita.');
+        }
+        if (!row) {
+            return res.status(404).send('Cita no encontrada.');
+        }
+        res.render('confirmation.html', row);
+    });
 });
 
 // API endpoint para obtener franjas horarias disponibles (simuladas).
