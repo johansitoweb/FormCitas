@@ -106,7 +106,7 @@ created_at        DATETIME DEFAULT CURRENT_TIMESTAMP
   Muestra la página de confirmación de la cita usando el ID real (no expone datos sensibles en la URL).
 
 - `GET /api/available-slots?year=YYYY&month=MMMM`  
-  Devuelve las fechas disponibles para agendar citas (simulado).
+  Devuelve las fechas disponibles para agendar citas.
 
 ---
 
@@ -119,7 +119,7 @@ created_at        DATETIME DEFAULT CURRENT_TIMESTAMP
 ---
 
 ## Autor
-- Desarrollado por [Tu Nombre]
+- Desarrollado por Javiel, Michael, Moises y Johan
 
 ## UML de la DB
 
